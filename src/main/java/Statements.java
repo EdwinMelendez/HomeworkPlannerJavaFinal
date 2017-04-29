@@ -11,7 +11,9 @@ import java.util.Date;
 public class Statements {
 
 
-    public static  ArrayList<Assignment> loadHomwork(){
+    static ArrayList<Assignment> assignments = new ArrayList<>();
+
+    public static  ArrayList<Assignment> loadHomework(){
 
         try{
             Connection.connect();
@@ -22,7 +24,7 @@ public class Statements {
 
             ResultSet allHomeworkRS = homeworkQuery.executeQuery(allHomeworkSQL);
 
-            ArrayList<Assignment> assignments = new ArrayList<>();
+
 
             while(allHomeworkRS.next()){
                 String classRoom = allHomeworkRS.getString("nameOfClass");
@@ -60,6 +62,10 @@ public class Statements {
             insertQuery.setString(2, title);
             insertQuery.setString(3, description);
             insertQuery.setString(4, date);
+
+            Assignment assignment = new Assignment(classRoom, title, description, date);
+
+            assignments.add(assignment);
 
             insertQuery.executeUpdate();
 
