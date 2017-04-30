@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by DarthVader on 4/29/17.
@@ -19,6 +20,10 @@ public class HomeworkGUI extends JFrame{
     private JTextField dateFieldtxt;
     private DefaultListModel<Assignment> listModel;
 
+    public static void main(String[] args) {
+
+        HomeworkGUI gui = new HomeworkGUI();
+    }
 
     protected HomeworkGUI(){
     try {
@@ -31,7 +36,7 @@ public class HomeworkGUI extends JFrame{
 
         homeworkList.setModel(listModel);
 
-        ArrayList<Assignment> databaseAssignments = Statements.loadHomework();
+        LinkedList<Assignment> databaseAssignments = Statements.assignments;
 
 
 
@@ -52,8 +57,7 @@ public class HomeworkGUI extends JFrame{
                 Statements.insertHomework(classOfAssignmenttxt.getText(),titleOfAssignmenttxt.getText(),
                         descriptionOfAssignmenttxt.getText(), dateFieldtxt.getText());
 
-
-
+                Statements.loadHomework();
 
 
             }
@@ -79,10 +83,7 @@ public class HomeworkGUI extends JFrame{
         });
     }
 
-    public static void main(String[] args) {
 
-        HomeworkGUI gui = new HomeworkGUI();
-    }
 
 
 

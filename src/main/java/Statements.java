@@ -1,9 +1,12 @@
+import sun.awt.image.ImageWatched;
+
 import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * Created by DarthVader on 4/29/17.
@@ -11,9 +14,9 @@ import java.util.Date;
 public class Statements {
 
 
-    static ArrayList<Assignment> assignments = new ArrayList<>();
+    static LinkedList<Assignment> assignments = new LinkedList<>();
 
-    public static  ArrayList<Assignment> loadHomework(){
+    public static LinkedList<Assignment> loadHomework(){
 
         try{
             Connection.connect();
@@ -27,6 +30,7 @@ public class Statements {
 
 
             while(allHomeworkRS.next()){
+
                 String classRoom = allHomeworkRS.getString("nameOfClass");
                 String title = allHomeworkRS.getString("titleOfAssignment");
                 String description = allHomeworkRS.getString("descriptionOfAssignment");
@@ -38,11 +42,14 @@ public class Statements {
             }
 
             Connection.disconnect();
-
+            homeworkQuery.close();
+            allHomeworkRS.close();
 
             return assignments;
 
+
         }catch (SQLException lHe){
+
             lHe.printStackTrace();
         }
 
