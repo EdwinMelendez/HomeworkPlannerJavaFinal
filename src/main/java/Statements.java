@@ -14,7 +14,8 @@ import java.util.LinkedList;
 public class Statements {
 
 
-    static LinkedList<Assignment> assignments = new LinkedList<>();
+    //static LinkedList<Assignment> allAssignments = new LinkedList<>();
+
 
     public static LinkedList<Assignment> loadHomework(){
 
@@ -25,9 +26,9 @@ public class Statements {
 
             PreparedStatement homeworkQuery = Connection.connection.prepareStatement(allHomeworkSQL);
 
-            ResultSet allHomeworkRS = homeworkQuery.executeQuery(allHomeworkSQL);
+            ResultSet allHomeworkRS = homeworkQuery.executeQuery();
 
-
+            LinkedList<Assignment> assignments = new LinkedList<>();
 
             while(allHomeworkRS.next()){
 
@@ -42,8 +43,8 @@ public class Statements {
             }
 
             Connection.disconnect();
-            homeworkQuery.close();
-            allHomeworkRS.close();
+//            homeworkQuery.close();
+ //           allHomeworkRS.close();
 
             return assignments;
 
@@ -70,9 +71,11 @@ public class Statements {
             insertQuery.setString(3, description);
             insertQuery.setString(4, date);
 
+            LinkedList<Assignment> newAssignment = new LinkedList<>();
+
             Assignment assignment = new Assignment(classRoom, title, description, date);
 
-            assignments.add(assignment);
+            newAssignment.add(assignment);
 
             insertQuery.executeUpdate();
 

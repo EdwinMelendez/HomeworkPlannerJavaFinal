@@ -13,7 +13,7 @@ public class HomeworkGUI extends JFrame{
     private JTextField classOfAssignmenttxt;
     private JTextField titleOfAssignmenttxt;
     private JTextField descriptionOfAssignmenttxt;
-    private JList homeworkList;
+    private JList<Assignment> homeworkList;
     private JButton addButton;
     private JButton deleteButton;
     private JButton exitButton;
@@ -32,19 +32,26 @@ public class HomeworkGUI extends JFrame{
         setTitle("Homework Planner");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+
         listModel = new DefaultListModel<Assignment>();
 
         homeworkList.setModel(listModel);
 
-        LinkedList<Assignment> databaseAssignments = Statements.assignments;
+        LinkedList<Assignment> databaseAssignments = Statements.loadHomework();
 
+        System.out.println(Statements.loadHomework());
 
+        System.out.println(databaseAssignments);
 
         for (Assignment assignment : databaseAssignments) {
+
             if(assignment != null) {
+
                 listModel.addElement(assignment);
             }
         }
+
+
 
     }catch (NullPointerException npe){
         npe.printStackTrace();

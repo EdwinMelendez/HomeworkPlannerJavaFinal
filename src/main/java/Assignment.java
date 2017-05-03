@@ -12,6 +12,7 @@ public class Assignment {
     private String date;
 
     private String dateForm = "MM/dd/yyyy";
+
     private SimpleDateFormat format = new SimpleDateFormat(dateForm);
 
     public String getNameOfClass() {

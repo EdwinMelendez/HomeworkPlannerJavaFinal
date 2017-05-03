@@ -25,7 +25,6 @@ public class Connection {
         }catch (SQLException sqle){
             sqle.printStackTrace();
         }
-
     }
 
     public static void disconnect(){
