@@ -1,20 +1,12 @@
-import sun.awt.image.ImageWatched;
-
-import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Statement;
 import java.util.LinkedList;
 
-/**
- * Created by DarthVader on 4/29/17.
- */
+
 public class Statements {
 
-
-    //static LinkedList<Assignment> allAssignments = new LinkedList<>();
 
 
     public static LinkedList<Assignment> loadHomework(){
@@ -24,9 +16,9 @@ public class Statements {
 
             String allHomeworkSQL = "SELECT * FROM Assignment";
 
-            PreparedStatement homeworkQuery = Connection.connection.prepareStatement(allHomeworkSQL);
+            Statement statement = Connection.connection.createStatement();
 
-            ResultSet allHomeworkRS = homeworkQuery.executeQuery();
+            ResultSet allHomeworkRS = statement.executeQuery(allHomeworkSQL);
 
             LinkedList<Assignment> assignments = new LinkedList<>();
 
@@ -43,8 +35,7 @@ public class Statements {
             }
 
             Connection.disconnect();
-//            homeworkQuery.close();
- //           allHomeworkRS.close();
+
 
             return assignments;
 
@@ -87,19 +78,20 @@ public class Statements {
 
     }
 
-    public static void deleteHomework(JList<Assignment> assignmentJList){
+    public static void deleteHomework(Assignment assignment){
 
         try{
             Connection.connect();
 
-            String deleteStatement = "DELETE FROM Assignment VALUES (?, ?, ?, ?)";
+            String deleteStatement = "DELETE FROM Assignment WHERE nameOfClass = ? AND titleOfAssignment = ? AND " +
+                    "descriptionOfAssignment = ? AND dueDate = ?";
 
             PreparedStatement deleteQuery = Connection.connection.prepareStatement(deleteStatement);
 
-            deleteQuery.setString(1, assignmentJList.getSelectedValue().getNameOfClass());
-            deleteQuery.setString(2, assignmentJList.getSelectedValue().getTitle());
-            deleteQuery.setString(3, assignmentJList.getSelectedValue().getDescription());
-            deleteQuery.setString(4, assignmentJList.getSelectedValue().getDate());
+            deleteQuery.setString(1, assignment.getNameOfClass());
+            deleteQuery.setString(2, assignment.getTitle());
+            deleteQuery.setString(3, assignment.getDescription());
+            deleteQuery.setString(4, assignment.getDate());
 
             deleteQuery.executeUpdate();
 
@@ -108,4 +100,8 @@ public class Statements {
         }
 
     }
+
+
+
+
 }

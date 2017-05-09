@@ -11,9 +11,7 @@ public class Assignment {
     private String description;
     private String date;
 
-    private String dateForm = "MM/dd/yyyy";
-
-    private SimpleDateFormat format = new SimpleDateFormat(dateForm);
+//
 
     public String getNameOfClass() {
         return nameOfClass;
@@ -47,38 +45,21 @@ public class Assignment {
         this.date = date;
     }
 
-//    public String getDateForm() {
-//        return dateForm;
-//    }
-//
-//    public void setDateForm(String dateForm) {
-//        this.dateForm = dateForm;
-//    }
-//
-//    public SimpleDateFormat getFormat() {
-//        return format;
-//    }
-//
-//    public void setFormat(SimpleDateFormat format) {
-//        this.format = format;
-//    }
 
     public Assignment(String nameOfClass, String title, String description, String date) {
         this.nameOfClass = nameOfClass;
         this.title = title;
         this.description = description;
         this.date = date;
-        //this.dateForm = dateForm;
-        //this.format = format;
     }
 
     @Override
     public String toString() {
-        return "Assignment{" +
-                "nameOfClass='" + nameOfClass + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", date=" + date +
-                '}';
+        return "Assignment [" +
+                "Class: '" + nameOfClass + '\'' +
+                ", Title: '" + title + '\'' +
+                ", Description: '" + description + '\'' +
+                ", Due date: " + date + " " +
+                ']';
     }
 }

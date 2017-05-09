@@ -17,8 +17,10 @@ public class HomeworkGUI extends JFrame{
     private JButton addButton;
     private JButton deleteButton;
     private JButton exitButton;
-    private JTextField dateFieldtxt;
+    private JSpinner dateSpinner;
+    private JButton updateButton;
     private DefaultListModel<Assignment> listModel;
+    private static LinkedList<Assignment> databaseAssignments = Statements.loadHomework();
 
     public static void main(String[] args) {
 
@@ -28,7 +30,7 @@ public class HomeworkGUI extends JFrame{
     protected HomeworkGUI(){
     try {
         setContentPane(rootPanel);
-        setSize(new Dimension(550, 550));
+        setSize(new Dimension(700, 300));
         setTitle("Homework Planner");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
@@ -37,19 +39,24 @@ public class HomeworkGUI extends JFrame{
 
         homeworkList.setModel(listModel);
 
-        LinkedList<Assignment> databaseAssignments = Statements.loadHomework();
+        homeworkList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        System.out.println(Statements.loadHomework());
+        dateSpinner.setModel(new SpinnerDateModel());
+        dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "MM-dd-yyyy"));
 
-        System.out.println(databaseAssignments);
+try {
+    for (Assignment assignment : databaseAssignments) {
 
-        for (Assignment assignment : databaseAssignments) {
+        if (assignment != null) {
 
-            if(assignment != null) {
-
-                listModel.addElement(assignment);
-            }
+            listModel.addElement(assignment);
         }
+    }
+}catch (NullPointerException npe){
+    npe.printStackTrace();
+    JOptionPane.showMessageDialog(HomeworkGUI.this, "Null Reference");
+
+}
 
 
 
@@ -61,12 +68,29 @@ public class HomeworkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                Statements.insertHomework(classOfAssignmenttxt.getText(),titleOfAssignmenttxt.getText(),
-                        descriptionOfAssignmenttxt.getText(), dateFieldtxt.getText());
+                String cOA = classOfAssignmenttxt.getText();
+                String tOA = titleOfAssignmenttxt.getText();
+                String dOA = descriptionOfAssignmenttxt.getText();
+                String dD = dateSpinner.getValue().toString();
 
-                Statements.loadHomework();
 
 
+
+                Assignment assignment = new Assignment(cOA, tOA, dOA, dD);
+
+                if(classOfAssignmenttxt.getText().equals("") || titleOfAssignmenttxt.getText().equals("") || descriptionOfAssignmenttxt.getText().equals("")) {
+
+                    validateText();
+
+
+                }else {
+
+                    Statements.insertHomework(cOA, tOA, dOA, dD);
+
+                    listModel.addElement(assignment);
+
+                    clearText();
+                }
             }
         });
 
@@ -75,10 +99,64 @@ public class HomeworkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                Statements.deleteHomework(homeworkList);
+                Assignment assignmentToDelete = homeworkList.getSelectedValue();
+
+                if (assignmentToDelete == null){
+                    JOptionPane.showMessageDialog(HomeworkGUI.this, "Please select" +
+                            " homework assignment to delete");
+                }else{
+
+                    Statements.deleteHomework(assignmentToDelete);
+
+                    listModel.removeElement(assignmentToDelete);
+
+                    clearText();
+                }
+
+
             }
         });
 
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Assignment assignmentToUpdate = homeworkList.getSelectedValue();
+
+                String cOA = classOfAssignmenttxt.getText();
+                String tOA = titleOfAssignmenttxt.getText();
+                String dOA = descriptionOfAssignmenttxt.getText();
+                String dD = dateSpinner.getValue().toString();
+
+                Assignment update = new Assignment(cOA, tOA, dOA, dD);
+
+
+
+                if(assignmentToUpdate == null){
+                    JOptionPane.showMessageDialog(HomeworkGUI.this, "Please select" +
+                            "homework assignment to update");
+
+                }else{
+
+                    if(classOfAssignmenttxt.getText().equals("") || titleOfAssignmenttxt.getText().equals("") || descriptionOfAssignmenttxt.getText().equals("")) {
+
+                        validateText();
+
+
+                    }else {
+                        Statements.deleteHomework(assignmentToUpdate);
+
+                        Statements.insertHomework(cOA, tOA, dOA, dD);
+
+                        listModel.removeElement(assignmentToUpdate);
+
+                        listModel.addElement(update);
+
+                        clearText();
+                    }
+                }
+            }
+        });
 
         exitButton.addActionListener(new ActionListener() {
             @Override
@@ -88,8 +166,36 @@ public class HomeworkGUI extends JFrame{
 
             }
         });
+
+
     }
 
+    void clearText(){
+        classOfAssignmenttxt.setText("");
+        titleOfAssignmenttxt.setText("");
+        descriptionOfAssignmenttxt.setText("");
+
+    }
+
+    void validateText(){
+
+        if(classOfAssignmenttxt.getText().equals("")){
+            classOfAssignmenttxt.grabFocus();
+            JOptionPane.showMessageDialog(HomeworkGUI.this, "Please enter the name of class");
+        }
+
+        if(titleOfAssignmenttxt.getText().equals("")){
+            titleOfAssignmenttxt.grabFocus();
+            JOptionPane.showMessageDialog(HomeworkGUI.this, "Please enter the title of assignment");
+        }
+
+        if(descriptionOfAssignmenttxt.getText().equals("")){
+            descriptionOfAssignmenttxt.grabFocus();
+            JOptionPane.showMessageDialog(HomeworkGUI.this, "Please enter the description of assignment");
+        }
+
+
+    }
 
 
 
