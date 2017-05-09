@@ -1,0 +1,11 @@
+Homework Planner Read Me:
+
+This project was adapted from the list of final project ideas provided. The goal of this project was to create a GUI application which communicates with a database. I set out to create an application that would be more user friendly than feature heavy. 
+
+DEPENDENCIES:
+
+sqlite: https://www.sqlite.org/download.html
+
+sqlite DB Browser(optional): http://sqlitebrowser.org/
+
+sqlite maven dependencies: https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
